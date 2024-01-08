@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Movies.Core.Entities;
 
 namespace Movies.Infrastructure.Data;
@@ -10,6 +11,8 @@ public class MovieContextSeed
         int retryForAvailability = retry.Value;
         try
         {
+            var log = loggerFactory.CreateLogger<MovieContextSeed>();
+            log.LogError($"Exception occured while connecting: {movieContext.Database.GetConnectionString()}");
             await movieContext.Database.EnsureCreatedAsync();
             if (!movieContext.Movies.Any())
             {
